@@ -1,0 +1,15 @@
+;; This config was generated using ensime-config-gen. Feel free to customize its contents manually.
+
+(
+
+:project-name "salvero"
+:project-package "org.salvero"
+
+:use-sbt t
+:sbt-subprojects (
+  (:name "core" :deps ())
+  (:name "akka" :deps ("core"))
+  (:name "lift" :deps ("core"))
+)
+
+)
