@@ -1,6 +1,7 @@
 package org.salvero.core
 
 import org.zeromq.ZMQ
+import grizzled.slf4j.Logging
 
 class MultipartSocket(socket: ZMQ.Socket) {
   def recvMore(flags: Int) = if (socket.hasReceiveMore)
@@ -62,6 +63,8 @@ trait FilterableNonBlockingRead {
 }
 
 trait Run extends Runnable {
+  this: Logging => 
+
   @volatile
   private var running = false
   def stop() {
@@ -71,9 +74,11 @@ trait Run extends Runnable {
   def run() {
     begin()
     running = true
+    debug("Running...")
     while (running) {
       step()
     }
+    debug("Stopping...")
     end()
   }
 
@@ -83,7 +88,7 @@ trait Run extends Runnable {
 }
 
 trait ZmqRun extends Run {
-  this: ZmqSocket =>
+  this: ZmqSocket with Logging =>
 
   def handler: Send
   def readMsg(): CaseClass
@@ -96,13 +101,21 @@ trait ZmqRun extends Run {
 }
 
 trait Receive
-  extends ZmqRun with ZmqSocket with BlockingRead with Deserialize {
-  def readMsg() = deserialize(read())
+  extends ZmqRun with ZmqSocket with BlockingRead with Deserialize with Logging {
+  def readMsg() = {
+    val msg = deserialize(read())
+    debug("Received " + msg)
+    msg
+  }
 }
 
 trait FilterableReceive
-  extends ZmqRun with ZmqSocket with FilterableBlockingRead with Deserialize {
-  def readMsg() = deserialize(read())
+  extends ZmqRun with ZmqSocket with FilterableBlockingRead with Deserialize with Logging {
+  def readMsg() = {
+    val msg = deserialize(read())
+    debug("Received " + msg)
+    msg
+  }
 }
 
 /** Mixin either the Bind or Connect trait when using Pull. */
@@ -111,10 +124,11 @@ class Pull(val endpoint: String, val handler: Send) extends Receive {
 }
 
 abstract class AbstractSubscribe(val endpoint: String, val handler: Send, keys: Set[String] = Set(""))
-  extends ZmqSocket with Connect {
+  extends ZmqSocket with Connect with Logging {
   lazy val socketType = ZMQ.SUB
   override def config(s: ZMQ.Socket) {
     for (key <- keys) s.subscribe(key.getBytes)
+    debug("Filtering on " + keys)
   }
 }
 

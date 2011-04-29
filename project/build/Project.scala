@@ -7,6 +7,7 @@ class Project(info: ProjectInfo) extends ParentProject(info) {
   
   val novusRels = "repo.novus rels" at "http://repo.novus.com/releases/"
   val novusSnaps = "repo.novus snaps" at "http://repo.novus.com/snapshots/"
+  val scalaToolsRels = "scala-tools rels" at "http://scala-tools.org/repo-releases/"
   
   class SalveroCoreProject(info: ProjectInfo) extends DefaultProject(info) {
     //need to get zmq.jar into a repo! for now it's in lib
@@ -20,6 +21,9 @@ class Project(info: ProjectInfo) extends ParentProject(info) {
     val salat = "com.novus" %% "salat-core" % "0.0.7-SNAPSHOT"
     val avro = "org.apache.avro" % "avro" % "1.5.0"
     
+    val slf4j = "org.clapper" %% "grizzled-slf4j" % "0.4"
+    val logback = "ch.qos.logback" % "logback-classic" % "0.9.28" % "test"
+    
     //testing
     val snapshots = "snapshots" at "http://scala-tools.org/repo-snapshots"
     val releases  = "releases" at "http://scala-tools.org/repo-releases"
@@ -29,13 +33,14 @@ class Project(info: ProjectInfo) extends ParentProject(info) {
   }
   
   class SalveroAkkaProject(info: ProjectInfo) extends DefaultProject(info) with AkkaProject {
+    //TODO logback is getting included in compile & test configs, and causes errors during unit test runs...
+  
     //testing
     def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
     override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
   }
   
   class SalveroLiftProject(info: ProjectInfo) extends DefaultProject(info) {
-    val scalaToolsRels = "scala-tools rels" at "http://scala-tools.org/repo-releases/"
     val liftActor = "net.liftweb" %% "lift-actor" % "2.3"
     
     //testing
