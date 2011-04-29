@@ -2,6 +2,17 @@ Makes it easy to send [Scala](http://scala-lang.org) case classes over [0MQ](htt
 
 Salvero is opinionated messaging.  Messages are assumed to be Scala case classes.  They are serialized to Avro byte arrays.  Messages are sent over 0MQ.
 
+Big ups to:
+
+ - Scala
+ - 0MQ
+ - Salat
+ - Avro
+ - salat-avro
+ - Akka
+ - Lift
+ - Hoegaarden
+
 # Core
 
 Provides simple wrappers around the basic 0MQ socket types:
@@ -27,6 +38,8 @@ case class Message(text: String)
 The Push class wraps a PUSH socket.  Just new one up and mixin either Bind or Connect, based on what you need.  Then ! messages at it all day long.
 
 ``` scala
+import org.salvero.core.{Push, Bind}
+
 val push = new Push("tcp://*:5555") with Bind
 push ! Message("Avro rulez")
 ```
@@ -36,6 +49,8 @@ The Pull class wraps a PULL socket and implements Runnable.  Just new one up, mi
 Receive handlers in core extend the Send trait and implement the ! method.  
 
 ``` scala
+import org.salvero.core.{Send, CaseClass, Pull, Connect}
+
 //handlers extend the Send trait and the ! method receives the message
 val handler = new Send {
   def ![A <: CaseClass: Manifest](msg: A) = msg match {
@@ -72,8 +87,8 @@ subscribe.stop() //after w00t ceases
 
 ``` scala
 val publish = new FilterablePublish("tcp://*:5556")
-publish ! ("wack", "node.js rulez")
-publish ! ("1337", "0MQ rulez")
+publish ! ("wack", Message("node.js rulez"))
+publish ! ("1337", Message("0MQ rulez"))
 
 val subscribe = new FilterableSubscribe("tcp://localhost:5556", handler, Set("1337"))
 new Thread(subscribe).start
@@ -97,6 +112,66 @@ Provides simple [Akka](http://akka.io) actors for basic 0MQ socket types:
 
 These actors send the messages they receive to another Akka actor.
 
+### Push/Pull
+
+No special Push needed for Akka, just use Push from core.  The Akka Pull class is an Actor and sends messages it receives to an ActorRef.
+
+``` scala
+import org.salvero.core.{Push, Bind, Connect}
+import org.salvero.akka.{Pull, Start, Stop}
+
+class Handler extends Actor {
+  def receive = {
+    case Message(text) => println("hollaaa: " + text)
+  }
+}
+
+val push = new Push("tcp://*:5555") with Bind
+push ! Message("Akka rulez")
+
+val handler = actorOf[Handler].start
+val pull = actorOf(new Pull("tcp://localhost:5555", handler) with Connect).start
+pull ! Start
+
+pull ! Stop //when you're all done
+```
+
+### Publish/Subscribe
+
+Again, use Publish from core, and Subscribe & FilterableSubscribe from Akka.
+
+``` scala
+import org.salvero.core.Publish
+import org.salvero.akka.{Subscribe, Start, Stop}
+
+val publish = new Publish("tcp://*:5556")
+publish ! Message("something")
+
+val subscribe = actorOf(new Subscribe("tcp://localhost:5556", handler)).start
+subscribe ! Start
+
+subscribe ! Stop
+```
+
+Or the filtered variety:
+
+```scala
+import org.salvero.core.FilterablePublish
+import org.salvero.akka.{FilterableSubscribe, Start, Stop}
+
+val publish = new FilterablePublish("tcp://*:5556")
+publish ! ("a", Message("something"))
+
+val subscribe = actorOf(new FilterableSubscribe("tcp://localhost:5556", handler, Set("a"))).start
+subscribe ! Start
+
+subscribe ! Stop
+```
+
+### Request/Reply
+
+(coming soon)
+
 # Lift
 
 Provides simple [Lift](http://liftweb.net) actors for basic 0MQ socket types:
@@ -106,3 +181,45 @@ Provides simple [Lift](http://liftweb.net) actors for basic 0MQ socket types:
  - Request & Reply (coming soon)
 
 These actors send the messages they receive to another Lift actor.
+
+### Push/Pull
+
+``` scala
+import org.salvero.core.{Push, Bind, Connect}
+import org.salvero.lift.{Pull, Start, Stop}
+
+val handler = new LiftActor {
+  override def messageHandler = {
+    case Message(text) => println(text)
+  }
+}
+
+val push = new Push("tcp://*:5555") with Bind
+push ! Message("Lift rulez")
+
+val pull = new Pull("tcp://localhost:5555", handler) with Connect
+pull ! Start
+
+pull ! Stop
+```
+
+### Publish/Subscribe
+
+``` scala
+import org.salvero.core.Publish
+import org.salvero.lift.{Subscribe, Start, Stop}
+
+val publish = new Publish("tcp://*:5556")
+publish ! Message("blah")
+
+val subscribe = new Subscribe("tcp://localhost:5556", handler)
+subscribe ! Start
+
+subscribe ! Stop
+```
+
+and filtered...
+
+### Request/Reply
+
+(coming soon)
