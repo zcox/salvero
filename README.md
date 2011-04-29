@@ -1,8 +1,8 @@
-Makes it easy to send [Scala](http://scala-lang.org) case classes over [0MQ](http://zeromq.org) sockets, using [salat-avro](https://github.com/T8Webware/salat-avro) for serialization/deserialization.
+Makes it easy to send [Scala](http://scala-lang.org) case classes over [0MQ](http://zeromq.org) sockets, using [salat-avro](https://github.com/T8Webware/salat-avro) for serialization/deserialization. Provides integration with [Akka](http://akka.io) and [Lift](http://liftweb.net) actors.  A good example would be Akka publishing messages to a group of Lift web apps via 0MQ.
 
 Salvero is opinionated messaging.  Messages are assumed to be Scala case classes.  They are serialized to Avro byte arrays.  Messages are sent over 0MQ.
 
-Big ups to:
+Salvero does very little itself. Instead it glues together a lot of awesome technologies. Big ups to:
 
  - [Scala](http://scala-lang.org)
  - [0MQ](http://zeromq.org)
@@ -11,7 +11,7 @@ Big ups to:
  - [salat-avro](https://github.com/T8Webware/salat-avro)
  - [Akka](http://akka.io)
  - [Lift](http://liftweb.net)
- - Hoegaarden
+ - [Hoegaarden](http://www.hoegaarden.com)
 
 # Core
 
