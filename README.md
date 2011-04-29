@@ -12,10 +12,9 @@ Provides simple wrappers around the basic 0MQ socket types:
 
 ## Push/Pull
 
-    ```scala
+    ``` scala
     val push = new Push("tcp://*:5555") with Bind
     ```
-
 ## Publish/Subscribe
 
 ## Request/Reply
