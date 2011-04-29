@@ -4,13 +4,13 @@ Salvero is opinionated messaging.  Messages are assumed to be Scala case classes
 
 Big ups to:
 
- - Scala
- - 0MQ
- - Salat
- - Avro
- - salat-avro
- - Akka
- - Lift
+ - [Scala](http://scala-lang.org)
+ - [0MQ](http://zeromq.org)
+ - [Salat](https://github.com/novus/salat)
+ - [Avro](http://avro.apache.org)
+ - [salat-avro](https://github.com/T8Webware/salat-avro)
+ - [Akka](http://akka.io)
+ - [Lift](http://liftweb.net)
  - Hoegaarden
 
 # Core
