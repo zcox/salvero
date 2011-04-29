@@ -3,9 +3,9 @@ Makes it easy to send Scala case classes over 0MQ sockets, using salat-avro for 
 # Core
 
 Provides simple wrappers around the basic 0MQ socket types:
-* Push & Pull
-* Publish & Subscribe (filtered & unfiltered)
-* Request & Reply (coming soon)
+ * Push & Pull
+ * Publish & Subscribe (filtered & unfiltered)
+ * Request & Reply (coming soon)
 
 # Akka
 
