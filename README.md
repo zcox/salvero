@@ -1,4 +1,4 @@
-Makes it easy to send Scala case classes over 0MQ sockets, using salat-avro for serialization/deserialization.
+Makes it easy to send [Scala](http://scala-lang.org) case classes over [0MQ](http://zeromq.org) sockets, using [salat-avro](https://github.com/T8Webware/salat-avro) for serialization/deserialization.
 
 # Core
 
@@ -7,6 +7,8 @@ Provides simple wrappers around the basic 0MQ socket types:
  - Push & Pull
  - Publish & Subscribe (filtered & unfiltered)
  - Request & Reply (coming soon)
+ 
+
 
 # Akka
 
