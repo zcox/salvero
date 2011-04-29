@@ -14,6 +14,14 @@ Sending a message is just the ! operator followed by a case class.
 
 Receiving a message involves a callback.
 
+### Messages
+
+They are Scala case classes, yo.
+
+``` scala
+case class Message(text: String)
+```
+
 ### Push/Pull
 
 The Push class wraps a PUSH socket.  Just new one up and mixin either Bind or Connect, based on what you need.  Then ! messages at it all day long.
@@ -56,12 +64,14 @@ The Subscribe class wraps a SUB socket and implements Runnable.  It does not fil
 val handler = //you know what to do
 val subscribe = new Subscribe("tcp://localhost:5556", handler)
 new Thread(subscribe).start
+
+subscribe.stop() //after w00t ceases
 ```
 
 0MQ also provides a simple way for SUB sockets to [filter out messages](http://zguide.zeromq.org/page:all#toc43) they don't want.  So does Salvero.  You need to use FilterablePublish, FilterableSubscribe and send messages with keys.
 
 ``` scala
-val publish = new FilterablePublish(("tcp://*:5556")
+val publish = new FilterablePublish("tcp://*:5556")
 publish ! ("wack", "node.js rulez")
 publish ! ("1337", "0MQ rulez")
 
