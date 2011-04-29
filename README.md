@@ -11,17 +11,19 @@ Provides simple wrappers around the basic 0MQ socket types:
 # Akka
 
 Provides simple Akka actors for basic 0MQ socket types:
-* Pull
-* Subscribe (filtered & unfiltered)
-* Request & Reply (coming soon)
+
+ - Pull
+ - Subscribe (filtered & unfiltered)
+ - Request & Reply (coming soon)
 
 These actors send the messages they receive to another Akka actor.
 
 # Lift
 
 Provides simple Lift actors for basic 0MQ socket types:
-* Pull
-* Subscribe (filtered & unfiltered)
-* Request & Reply (coming soon)
+
+ - Pull
+ - Subscribe (filtered & unfiltered)
+ - Request & Reply (coming soon)
 
 These actors send the messages they receive to another Lift actor.
