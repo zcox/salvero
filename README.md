@@ -14,6 +14,7 @@ Salvero does very little itself. Instead it glues together a lot of awesome tech
  - [Hoegaarden](http://www.hoegaarden.com)
  
 TODO
+
  - Publish to public repo (scala-tools? sonatype oss?)
  - Request/Reply socket wrappers
  - Abstract out specific case class serialization format (avro, protobuf, etc), provide impls via type classes (maybe...)
