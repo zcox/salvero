@@ -12,6 +12,11 @@ Salvero does very little itself. Instead it glues together a lot of awesome tech
  - [Akka](http://akka.io)
  - [Lift](http://liftweb.net)
  - [Hoegaarden](http://www.hoegaarden.com)
+ 
+TODO
+ - Publish to public repo (scala-tools? sonatype oss?)
+ - Request/Reply socket wrappers
+ - Abstract out specific case class serialization format (avro, protobuf, etc), provide impls via type classes (maybe...)
 
 # Core
 
@@ -223,3 +228,9 @@ and filtered...
 ### Request/Reply
 
 (coming soon)
+
+# Contributors
+
+ - [Zach Cox](http://github.com/zcox)
+ - [Luke Amdor](http://github.com/rubbish)
+
